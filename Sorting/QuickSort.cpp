@@ -24,11 +24,20 @@ int partition(vector<int>&v,int st,int en)
     return pindex;
 }
 
+int partition_r(vector<int>&v,int low,int high)
+{
+    srand(time(NULL));
+    int random = low + rand() % (high - low);
+
+    swap(v[random], v[low]);
+  
+    return partition(v, low, high);
+}
 void Quicksort(vector<int>&v,int i,int j)
 {
     if(i<j)
     {
-        int pivot = partition(v,i,j);
+        int pivot = partition_r(v,i,j);
         Quicksort(v,i,pivot-1);
         Quicksort(v,pivot+1,j);
     }
