@@ -4,8 +4,8 @@ using namespace std;
 struct Node
 {
     Node* links[26];
-    int pc=0;
-    int ew=0;
+    int prefcnt[26] = {0};
+    int cnt=0;
     
     bool havekey(char c)
     {
@@ -22,36 +22,20 @@ struct Node
         return links[c-'a'];
     }
     
-    void increaseprefix()
+    void setcnt(int i)
     {
-        pc++;
-    }
-
-    void decreaseprefix()
-    {
-        pc--;
-    }
-
-    int getPrefcnt()
-    {
-        return pc;
-    }
-
-    void increaseEnd()
-    {
-        ew++;
-    }
-
-    void decreaseEndcnt()
-    {
-        ew--;
-    }
-
-    int getEndcount()
-    {
-        return ew;
+        cnt+=i;
     }
     
+    void increase_prefcnt(char c)
+    {
+        prefcnt[c-'a']++;
+    }
+
+    int get_prefcnt(char c)
+    {
+        return prefcnt[c-'a'];
+    }
 };
 
 class Trie
@@ -73,10 +57,10 @@ public:
             {
                 cur->set(word[i]);
             }
+            cur->increase_prefcnt(word[i]);
             cur = cur->next(word[i]);
-            cur->increaseprefix();
         }
-        cur->increaseEnd();
+        cur->setcnt(1);
     }
 
     int countWordsEqualTo(string &word){
@@ -86,7 +70,7 @@ public:
             if(!cur->havekey(word[i]))return 0;
             cur = cur->next(word[i]);
         }
-        return cur->getEndcount();
+        return cur->cnt;
     }
 
 
@@ -98,19 +82,23 @@ public:
             {
                 return 0;
             }
+            
+            if(i==word.size()-1)
+            {
+                return cur->get_prefcnt(word[i]);
+            }
             cur = cur->next(word[i]);
         }
-        return cur->getPrefcnt();
     }
 
     void erase(string &word){
         Node *cur = root;
         for (int i = 0; i < word.size(); i++)
         {
+            cur->prefcnt[word[i]-'a']--;
             cur = cur->next(word[i]);
-            cur->decreaseprefix();
         }
-        cur->decreaseEndcnt();
+        cur->setcnt(-1);
     }
    
 };
