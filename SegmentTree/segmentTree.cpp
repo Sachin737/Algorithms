@@ -3,7 +3,7 @@
 using namespace std;
 typedef long long ll;
 
-// Example Segtree for rangeMin
+// Example Segtree for rangeSum
 struct SegTree{
 
     ll size;
