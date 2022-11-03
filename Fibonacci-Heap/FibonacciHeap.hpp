@@ -196,6 +196,7 @@ public:
 				H->minNode->child = NULL;
 
 				node *tt = H->minNode->right;
+				// cout << tt->key << "\n";
 
 				H->minNode->left = H->minNode;
 				H->minNode->right = H->minNode;
@@ -370,8 +371,6 @@ public:
 				}
 			}
 		}
-
-		Fib_Heap_Display(H);
 		return H;
 	}
 
@@ -445,6 +444,10 @@ public:
 			node *par = x->parent;
 			Cut(H, x, x->parent); // cutting X to x.parent edge
 			CascadingCut(H, par); // recursively cutting edge if parent edge is marked and parent.key>x.key
+		}else{
+			if(x->key < H->minNode->key){
+				H->minNode = x;
+			}
 		}
 	}
 
